@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         if (updateUserInfo.getEmail() != null) {
             Optional<User> userWithTheSameEmail = userRepository.getUser(updateUserInfo.getEmail());
-            if (userWithTheSameEmail.isPresent() && !userWithTheSameEmail.equals(user)) {
+            if (userWithTheSameEmail.isPresent() && !userWithTheSameEmail.get().equals(user)) {
                 String error = "user's email already used by another user";
                 log.warn(error);
                 throw new ConflictDataException(error);
