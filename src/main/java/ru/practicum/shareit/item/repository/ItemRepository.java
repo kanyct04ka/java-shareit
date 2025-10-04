@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface ItemRepository {
     Item addItem(Item item);
+
     Optional<Item> getItem(long id);
+
     List<Item> getItems(long userId);
+
     List<Item> getItems(String text);
+
     void updateItem(Item item);
 }
