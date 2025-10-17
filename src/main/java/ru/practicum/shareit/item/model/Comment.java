@@ -1,10 +1,11 @@
-package ru.practicum.shareit.user.model;
+package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.Instant;
 
@@ -15,24 +16,26 @@ import java.time.Instant;
 @Entity
 @SequenceGenerator(
         name = "id_gen",
-        sequenceName = "user_seq",
+        sequenceName = "comment_seq",
         allocationSize = 1)
-@Table(name = "users")
-public class User {
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_gen")
     private long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "text", nullable = false, length = 65535)
+    private String text;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User author;
 
     @Column(name = "created_at", nullable = false)
     private Instant created;
-
-    @Column(name = "updated_at", nullable = false)
-    private Instant updated;
 }

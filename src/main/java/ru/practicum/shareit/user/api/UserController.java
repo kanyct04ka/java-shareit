@@ -2,8 +2,8 @@ package ru.practicum.shareit.user.api;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +14,7 @@ import ru.practicum.shareit.user.service.UserService;
 
 
 @Slf4j
+@RequiredArgsConstructor
 @Validated
 @RestController
 @RequestMapping(path = "/users")
@@ -21,18 +22,13 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(
             @RequestBody @Valid
             CreateUserDto user
     ) {
-        log.info("Request to create user with data: {}", user.toString());
+        log.info("TEST Request to create user with data: {}", user.toString());
         return userService.createUser(user);
     }
 
@@ -41,6 +37,7 @@ public class UserController {
             @PathVariable @Positive(message = "id should be positive number")
             long id
     ) {
+        log.info("TEST Request to get user={}", id);
         return userService.getUser(id);
     }
 
@@ -51,7 +48,7 @@ public class UserController {
             @RequestBody @Valid
             UpdateUserDto updateUserDto
     ) {
-        log.info("Request to update user with id: {}", id);
+        log.info("TEST Request to update user with id: {}", id);
         return userService.updateUser(id, updateUserDto);
     }
 
@@ -61,7 +58,7 @@ public class UserController {
             @PathVariable @Positive(message = "id should be positive number")
             long id
     ) {
-        log.info("Request to delete user with id: {}", id);
+        log.info("TEST Request to delete user with id: {}", id);
         userService.deleteUser(id);
     }
 }
