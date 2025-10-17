@@ -85,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("item not found"));
 
-        List<CommentDto>  comments =commentRepository.findAllByItemId(itemId)
+        List<CommentDto>  comments = commentRepository.findAllByItemId(itemId)
                 .stream()
                 .map(commentMapper::mapToCommentDto)
                 .collect(Collectors.toList());
