@@ -78,8 +78,9 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new EntityNotFoundException("booking not found"));
 
-        if (booking.getUser().getId() != userId) {
-            throw new ForbiddenException("it is not your booking");
+        if (booking.getUser().getId() != userId
+                && booking.getItem().getOwner().getId() != userId) {
+            throw new ForbiddenException("booking is available only for item owner or booker");
         }
 
         return bookingMapper.mapToBookingDto(booking);

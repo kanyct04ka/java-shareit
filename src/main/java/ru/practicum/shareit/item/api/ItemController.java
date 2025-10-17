@@ -61,7 +61,7 @@ public class ItemController {
             long itemId
     ) {
         log.info("TEST Request from user_id={} to get item={}", userId, itemId);
-        return itemService.getItem(itemId);
+        return itemService.getItem(itemId, userId);
     }
 
     @GetMapping("/search")

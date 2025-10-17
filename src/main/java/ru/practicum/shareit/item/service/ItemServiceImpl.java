@@ -80,16 +80,24 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemWithAdditionalInfoDto getItem(long id) {
-        return itemMapper.mapToItemWithAdditionalInfoDto(
-                itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("item not found")),
-                bookingRepository.findLastBookingForItem(id, Instant.now()),
-                bookingRepository.findNextBookingForItem(id, Instant.now()),
-                commentRepository.findAllByItemId(id)
-                        .stream()
-                        .map(commentMapper::mapToCommentDto)
-                        .collect(Collectors.toList())
-        );
+    public ItemWithAdditionalInfoDto getItem(long itemId, long userId) {
+
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("item not found"));
+
+        List<CommentDto>  comments =commentRepository.findAllByItemId(itemId)
+                .stream()
+                .map(commentMapper::mapToCommentDto)
+                .collect(Collectors.toList());
+
+        if (item.getOwner().getId() == userId) {
+            return itemMapper.mapToItemWithAdditionalInfoDto(item,
+                    bookingRepository.findLastBookingForItem(itemId, Instant.now()),
+                    bookingRepository.findNextBookingForItem(itemId, Instant.now()),
+                    comments);
+        }
+
+        return itemMapper.mapToItemWithAdditionalInfoDto(item, null, null, comments);
     }
 
     @Override
