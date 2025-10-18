@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.ConflictDataException;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.user.api.dto.CreateUserDto;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
+    @Transactional
     public UserDto createUser(CreateUserDto createUser) {
         // email should be unique
         if (userRepository.findByEmail(createUser.getEmail()).isPresent()) {
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto getUser(long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("user with requested id not found"));
@@ -48,6 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(long id, UpdateUserDto updateUserInfo) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("user with requested id not found"));
@@ -73,14 +77,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(long id) {
         // checking for existing user is unnecessary for deleting
         userRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean userExists(long id) {
-        return userRepository.findById(id).isPresent();
     }
 
 }
