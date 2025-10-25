@@ -3,8 +3,8 @@ package ru.practicum.shareit.item.model;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.practicum.shareit.user.model.User;
-import java.time.Instant;
 
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -15,32 +15,26 @@ import java.time.Instant;
 @Entity
 @SequenceGenerator(
         name = "id_gen",
-        sequenceName = "item_seq",
+        sequenceName = "comment_seq",
         allocationSize = 1)
-@Table(name = "items")
-public class Item {
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_gen")
     private long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "text", nullable = false, length = 65535)
+    private String text;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User owner;
-
-    @Column(name = "is_available", nullable = false)
-    private boolean available;
+    private User author;
 
     @Column(name = "created_at", nullable = false)
     private Instant created;
-
-    @Column(name = "updated_at", nullable = false)
-    private Instant updated;
-
 }
