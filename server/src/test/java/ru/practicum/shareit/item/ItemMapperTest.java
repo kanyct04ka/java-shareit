@@ -1,0 +1,32 @@
+package ru.practicum.shareit.item;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import ru.practicum.shareit.item.api.dto.CreateItemDto;
+import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
+
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+public class ItemMapperTest {
+
+    @Autowired
+    private ItemMapper itemMapper;
+
+    @Test
+    void mapToItem_WithoutRequest_ShouldMapCorrectly() {
+        CreateItemDto dto = new CreateItemDto("drill", "1000W", true, null);
+
+        Item item = itemMapper.mapToItem(dto, null);
+
+        assertNotNull(item);
+        assertEquals("drill", item.getName());
+        assertEquals("1000W", item.getDescription());
+        assertTrue(item.isAvailable());
+        assertEquals(null, item.getRequest());
+    }
+}
