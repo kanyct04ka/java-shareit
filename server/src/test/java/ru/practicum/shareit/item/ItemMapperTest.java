@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ItemMapperTest {
-
     @Autowired
     private ItemMapper itemMapper;
 
