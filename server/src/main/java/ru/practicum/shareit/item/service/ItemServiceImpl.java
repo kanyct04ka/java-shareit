@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.item.api.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -71,7 +72,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new EntityNotFoundException("item not found"));
 
         if (!item.getOwner().equals(user)) {
-            throw new BadRequestException("trying to update foreign item");
+            throw new ForbiddenException("trying to update foreign item");
         }
 
         if (updateItemDto.getName() != null && !updateItemDto.getName().isBlank()) {

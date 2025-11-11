@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.booking.dto.CreateBookingDto;
 import ru.practicum.shareit.client.BaseClient;
+
 
 @Service
 public class BookingClient extends BaseClient {
@@ -25,6 +27,10 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> createBooking(long userId, CreateBookingDto booking) {
+        if (booking.getStart().equals(booking.getEnd())
+                || booking.getStart().isAfter(booking.getEnd())) {
+            throw new ValidationException("end should be strongly after start");
+        }
         return post("", userId, booking);
     }
 

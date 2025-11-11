@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Object> addItem(
-            @RequestHeader("X-Sharer-User-Id") @Positive
+            @RequestHeader("X-Sharer-User-Id") @Positive(message = "user id should be positive number")
             long userId,
             @RequestBody @Valid
             CreateItemDto item
@@ -68,7 +69,7 @@ public class ItemController {
     public ResponseEntity<Object> searchItems(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "user id should be positive number")
             long userId,
-            @RequestParam
+            @RequestParam @NotBlank
             String text
     ) {
         log.info("Request from userId={} for search items by text={}", userId, text);

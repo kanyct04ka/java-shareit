@@ -48,11 +48,6 @@ public class BookingServiceImpl implements BookingService {
             throw new BadRequestException("item is not available");
         }
 
-        if (createBooking.getStart().equals(createBooking.getEnd())
-                || createBooking.getStart().isAfter(createBooking.getEnd())) {
-            throw new BadRequestException("end should be strongly after start");
-        }
-
         Booking booking = bookingMapper.mapToBooking(createBooking);
         booking.setItem(item);
         booking.setUser(user);
